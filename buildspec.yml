@@ -1,0 +1,43 @@
+version: 0.2
+
+env:
+  variables:
+    APP_NAME: "nodejs-app"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+  pre_build:
+    commands:
+      - echo $REPO_URL
+      - REPOSITORY=${REPO_URL%/*}
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $REPOSITORY
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+  build:
+    commands:
+      - echo "Building from $(pwd)"
+      - echo Build started on `date`
+      - echo Building the Docker image...    
+      - cd $APP_NAME
+      - docker build -t $APP_NAME:$IMAGE_TAG .
+      - docker tag $APP_NAME:$IMAGE_TAG $REPO_URL:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $REPO_URL:$IMAGE_TAG
+      - echo Preparing spec files in new folder
+      - echo Preparating artifacts
+      - mkdir artifacts
+      - cp imagedefinition.json artifacts/imagedefinition.json
+      - sed -i "s|<CONTAINER_NAME>|$CONTAINER_NAME|g" artifacts/imagedefinition.json
+      - sed -i "s|<REPO_URL>|$REPO_URL:$IMAGE_TAG|g" artifacts/imagedefinition.json
+      - cat artifacts/imagedefinition.json
+artifacts:
+  files:
+    - '**/*'
+  base-directory: '$APP_NAME/artifacts'
