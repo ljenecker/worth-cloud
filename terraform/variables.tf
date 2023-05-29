@@ -21,12 +21,6 @@ variable "tags" {
   })
 }
 
-
-# variable "app_name" {
-#   description = "The name of your app."
-#   type        = string
-# }
-
 variable "container_name" {
   description = "The name of your container."
   type        = string
@@ -46,13 +40,11 @@ variable "repository_owner" {
 variable "repository_name" {
   description = "The name of the Github repository"
   type        = string
-  default     = "worth"
 }
 
 variable "repository_branch" {
   description = "The name of branch the Github repository, which is going to trigger a new CodePipeline excecution"
   type        = string
-  default     = "main"
 }
 
 variable "github_token_secret_name" {

@@ -21,7 +21,7 @@ To deploy the Terraform project, do the following:
 
 5. Clone source code.
 
-6. Push source code to new private repository.
+6. Change tfvars and push source code to new private repository.
 
 7. Uncomment github workflow prerequisite.yaml and push changes.
 
