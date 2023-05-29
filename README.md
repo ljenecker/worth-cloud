@@ -17,7 +17,7 @@ To deploy the Terraform project, do the following:
 
 3. AWS account with administrator role access.
 
-4. Create GitHub Secrets for AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GH_TOKEN and PG_TOKEN (postgress).
+4. Create GitHub Secrets for AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GH_TOKEN and PG_TOKEN (any secure postgress password).
 
 5. Clone source code.
 
